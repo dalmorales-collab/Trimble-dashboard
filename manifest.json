@@ -2,7 +2,7 @@
   "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html",
   "title": "Dashboard de Seguimiento de Tareas",
   "description": "Dashboard de métricas, análisis por disciplina y tiempos de reacción en Trimble Connect.",
-  "extensionType": [
-    "project"
-  ]
+  "extensionType": ["project"],
+  "type": "panel",
+  "enabled": true
 }
