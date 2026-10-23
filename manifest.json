@@ -1,17 +1,8 @@
 {
-  "name": "Dashboard de Seguimiento de Tareas",
+  "name": "Dashboard de Tareas",
   "version": "1.0.0",
-  "description": "Dashboard de métricas, análisis por disciplina y tiempos de reacción conectado a la herramienta Tools de Trimble Connect.",
-  "vendor": "Ingeniería & BIM",
-  "icon": "https://raw.githubusercontent.com/primefaces/sakai-ng/main/src/assets/layout/images/logo-dark.svg",
-  "extensionPoints": [
-    "ProjectDetail"
-  ],
-  "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html",
-  "permissions": [
-    "project:read",
-    "user:read",
-    "topic:read",
-    "topic:write"
-  ]
+  "description": "Seguimiento de tareas, disciplinas y tiempos de reacción.",
+  "vendor": "Ingeniería BIM",
+  "extensionPoint": "ProjectDetail",
+  "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html"
 }
