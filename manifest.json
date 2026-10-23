@@ -2,7 +2,7 @@
   "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html",
   "title": "Dashboard de Tareas",
   "description": "Dashboard de seguimiento de métricas, análisis por disciplina y tiempos de reacción en Trimble Connect.",
-  "icon": "https://raw.githubusercontent.com/primefaces/sakai-ng/main/src/assets/layout/images/logo-dark.svg",
-  "infoUrl": "https://dalmorales-collab.github.io/Trimble-dashboard/",
+  "icon": "https://dalmorales-collab.github.io/Trimble-dashboard/icon.svg",
+  "infoUrl": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html",
   "extensionType": ["project"]
 }
