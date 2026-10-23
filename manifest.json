@@ -1,10 +1,11 @@
 {
-  "name": "Dashboard de Tareas",
-  "version": "1.0.0",
-  "description": "Dashboard de seguimiento de métricas y tareas en Trimble Connect.",
-  "vendor": "Ingeniería BIM",
-  "extensionPoints": [
-    "ProjectDetail"
+  "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html",
+  "title": "Dashboard de Tareas",
+  "description": "Dashboard de métricas, análisis por disciplina y tiempos de reacción en Trimble Connect.",
+  "icon": "https://raw.githubusercontent.com/primefaces/sakai-ng/main/src/assets/layout/images/logo-dark.svg",
+  "extensionType": [
+    "project"
   ],
-  "url": "https://dalmorales-collab.github.io/Trimble-dashboard/index.html"
+  "type": "panel",
+  "enabled": true
 }
