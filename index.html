@@ -1,228 +1,225 @@
-!DOCTYPE html
-html lang=es
-head
-  meta charset=UTF-8
-  meta name=viewport content=width=device-width, initial-scale=1.0
-  titleDashboard de Tareas - Trimble Connecttitle
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard de Tareas - Trimble Connect</title>
   
-  !-- Tailwind CSS CDN --
-  script src=httpscdn.tailwindcss.comscript
-  !-- Chart.js CDN --
-  script src=httpscdn.jsdelivr.netnpmchart.jsscript
-  !-- Trimble Connect Workspace API --
-  script src=httpsconnect-workspace-api.trimble.comtrimble-connect-workspace-api.jsscript
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Trimble Connect Webview API Oficial -->
+  <script src="https://connect-webview.trimble.com/connect-webview-api.js"></script>
 
-  script
+  <script>
     tailwind.config = {
-      darkMode 'class',
-      theme {
-        extend {
-          colors {
-            trimble {
-              blue '#0063A3',
-              darkBlue '#002F56',
-              yellow '#F0AB00',
-              grayDark '#12161A',
-              cardDark '#1A2129',
-              borderDark '#2A3441'
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            trimble: {
+              blue: '#0063A3',
+              darkBlue: '#002F56',
+              yellow: '#F0AB00',
+              grayDark: '#12161A',
+              cardDark: '#1A2129',
+              borderDark: '#2A3441'
             }
           }
         }
       }
     }
-  script
-head
-body class=bg-trimble-grayDark text-slate-100 font-sans min-h-screen p-4 mdp-6
+  </script>
+</head>
+<body class="bg-trimble-grayDark text-slate-100 font-sans min-h-screen p-4 md:p-6">
 
-  !-- Header --
-  header class=flex flex-col mdflex-row mditems-center justify-between gap-4 pb-6 border-b border-trimble-borderDark
-    div
-      div class=flex items-center gap-3
-        div class=w-3 h-8 bg-trimble-yellow rounded-fulldiv
-        h1 class=text-2xl font-bold text-white tracking-wideDashboard de Tareas (Tools)h1
-      div
-      p class=text-sm text-slate-400 mt-1 id=project-infoConectando con Trimble Connect API...p
-    div
-    div class=flex items-center gap-3
-      span id=api-status class=px-3 py-1 rounded-full text-xs font-semibold bg-yellow-50010 text-yellow-400 border border-yellow-50020 flex items-center gap-2
-        span class=w-2 h-2 rounded-full bg-yellow-400 animate-pulsespan Sincronizando con Trimble...
-      span
-      button onclick=refreshData() class=bg-trimble-blue hoverbg-blue-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition-all shadow-md hovershadow-blue-50020
+  <!-- Header -->
+  <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-trimble-borderDark">
+    <div>
+      <div class="flex items-center gap-3">
+        <div class="w-3 h-8 bg-trimble-yellow rounded-full"></div>
+        <h1 class="text-2xl font-bold text-white tracking-wide">Dashboard de Tareas (Tools)</h1>
+      </div>
+      <p class="text-sm text-slate-400 mt-1" id="project-info">Conectando con Trimble Connect API...</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="api-status" class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> Sincronizando con Trimble...
+      </span>
+      <button onclick="refreshData()" class="bg-trimble-blue hover:bg-blue-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-blue-500/20">
         Re-sincronizar
-      button
-    div
-  header
+      </button>
+    </div>
+  </header>
 
-  !-- Métricas Principales (KPIs) --
-  section class=grid grid-cols-1 smgrid-cols-2 lggrid-cols-5 gap-4 my-6
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg
-      p class=text-xs font-medium text-slate-400 uppercase tracking-widerTotal Tareas (Tools)p
-      div class=flex items-baseline justify-between mt-2
-        span id=kpi-total class=text-3xl font-extrabold text-white0span
-        span class=text-xs text-slate-500Registradasspan
-      div
-    div
+  <!-- Métricas Principales (KPIs) -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 my-6">
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg">
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Total Tareas (Tools)</p>
+      <div class="flex items-baseline justify-between mt-2">
+        <span id="kpi-total" class="text-3xl font-extrabold text-white">0</span>
+        <span class="text-xs text-slate-500">Registradas</span>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg
-      p class=text-xs font-medium text-slate-400 uppercase tracking-widerPendientesp
-      div class=flex items-baseline justify-between mt-2
-        span id=kpi-pending class=text-3xl font-extrabold text-amber-4000span
-        span class=text-xs text-amber-50080 font-mediumPor iniciarspan
-      div
-    div
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg">
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Pendientes</p>
+      <div class="flex items-baseline justify-between mt-2">
+        <span id="kpi-pending" class="text-3xl font-extrabold text-amber-400">0</span>
+        <span class="text-xs text-amber-500/80 font-medium">Por iniciar</span>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg
-      p class=text-xs font-medium text-slate-400 uppercase tracking-widerEn Cursop
-      div class=flex items-baseline justify-between mt-2
-        span id=kpi-in-progress class=text-3xl font-extrabold text-blue-4000span
-        span class=text-xs text-blue-50080 font-mediumEn procesospan
-      div
-    div
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg">
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">En Curso</p>
+      <div class="flex items-baseline justify-between mt-2">
+        <span id="kpi-in-progress" class="text-3xl font-extrabold text-blue-400">0</span>
+        <span class="text-xs text-blue-500/80 font-medium">En proceso</span>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg
-      p class=text-xs font-medium text-slate-400 uppercase tracking-widerCompletadasp
-      div class=flex items-baseline justify-between mt-2
-        span id=kpi-completed class=text-3xl font-extrabold text-emerald-4000span
-        span class=text-xs text-emerald-50080 font-mediumCerradasspan
-      div
-    div
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg">
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Completadas</p>
+      <div class="flex items-baseline justify-between mt-2">
+        <span id="kpi-completed" class="text-3xl font-extrabold text-emerald-400">0</span>
+        <span class="text-xs text-emerald-500/80 font-medium">Cerradas</span>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg border-l-4 border-l-trimble-yellow
-      p class=text-xs font-medium text-slate-400 uppercase tracking-widerTiempo Reacción Promediop
-      div class=flex items-baseline justify-between mt-2
-        span id=kpi-reaction-time class=text-3xl font-extrabold text-trimble-yellow0.0hspan
-        span class=text-xs text-slate-400Asignación ➔ Atenciónspan
-      div
-    div
-  section
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-4 rounded-xl shadow-lg border-l-4 border-l-trimble-yellow">
+      <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Tiempo Reacción Promedio</p>
+      <div class="flex items-baseline justify-between mt-2">
+        <span id="kpi-reaction-time" class="text-3xl font-extrabold text-trimble-yellow">0.0h</span>
+        <span class="text-xs text-slate-400">Asignación ➔ Atención</span>
+      </div>
+    </div>
+  </section>
 
-  !-- Gráficos --
-  section class=grid grid-cols-1 lggrid-cols-3 gap-6 mb-6
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg
-      h3 class=text-sm font-semibold text-slate-200 mb-4Tareas por Disciplina  Equipoh3
-      div class=relative h-60
-        canvas id=disciplineChartcanvas
-      div
-    div
+  <!-- Gráficos -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg">
+      <h3 class="text-sm font-semibold text-slate-200 mb-4">Tareas por Disciplina / Equipo</h3>
+      <div class="relative h-60">
+        <canvas id="disciplineChart"></canvas>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg
-      h3 class=text-sm font-semibold text-slate-200 mb-4Estado por Disciplinah3
-      div class=relative h-60
-        canvas id=statusChartcanvas
-      div
-    div
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg">
+      <h3 class="text-sm font-semibold text-slate-200 mb-4">Estado por Disciplina</h3>
+      <div class="relative h-60">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
 
-    div class=bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg
-      h3 class=text-sm font-semibold text-slate-200 mb-4Tiempo de Reacción por Disciplina (Horas)h3
-      div class=relative h-60
-        canvas id=reactionChartcanvas
-      div
-    div
-  section
+    <div class="bg-trimble-cardDark border border-trimble-borderDark p-5 rounded-xl shadow-lg">
+      <h3 class="text-sm font-semibold text-slate-200 mb-4">Tiempo de Reacción por Disciplina (Horas)</h3>
+      <div class="relative h-60">
+        <canvas id="reactionChart"></canvas>
+      </div>
+    </div>
+  </section>
 
-  !-- Tabla de Tareas extraídas de Trimble Connect --
-  section class=bg-trimble-cardDark border border-trimble-borderDark rounded-xl shadow-lg overflow-hidden
-    div class=p-4 border-b border-trimble-borderDark flex flex-col mdflex-row mditems-center justify-between gap-4
-      h2 class=text-base font-semibold text-whiteRegistro Detallado de Tareas (Tools)h2
+  <!-- Tabla de Tareas -->
+  <section class="bg-trimble-cardDark border border-trimble-borderDark rounded-xl shadow-lg overflow-hidden">
+    <div class="p-4 border-b border-trimble-borderDark flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <h2 class="text-base font-semibold text-white">Registro Detallado de Tareas (Tools)</h2>
       
-      div class=flex flex-wrap items-center gap-3
-        input type=text id=searchInput oninput=applyFilters() placeholder=Buscar tarea o asignado... class=bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focusoutline-none focusborder-trimble-blue w-48
+      <div class="flex flex-wrap items-center gap-3">
+        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Buscar tarea o asignado..." class="bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none focus:border-trimble-blue w-48">
         
-        select id=disciplineFilter onchange=applyFilters() class=bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focusoutline-none focusborder-trimble-blue
-          option value=ALLTodas las Disciplinasoption
-        select
+        <select id="disciplineFilter" onchange="applyFilters()" class="bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none focus:border-trimble-blue">
+          <option value="ALL">Todas las Disciplinas</option>
+        </select>
 
-        select id=statusFilter onchange=applyFilters() class=bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focusoutline-none focusborder-trimble-blue
-          option value=ALLTodos los Estadosoption
-          option value=PendientePendienteoption
-          option value=En CursoEn Cursooption
-          option value=CompletadaCompletadaoption
-        select
-      div
-    div
+        <select id="statusFilter" onchange="applyFilters()" class="bg-trimble-grayDark border border-trimble-borderDark text-sm rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none focus:border-trimble-blue">
+          <option value="ALL">Todos los Estados</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="En Curso">En Curso</option>
+          <option value="Completada">Completada</option>
+        </select>
+      </div>
+    </div>
 
-    div class=overflow-x-auto
-      table class=w-full text-sm text-left text-slate-300
-        thead class=text-xs uppercase bg-trimble-grayDark text-slate-400 border-b border-trimble-borderDark
-          tr
-            th class=px-4 py-3ID  Tareath
-            th class=px-4 py-3Disciplinath
-            th class=px-4 py-3Responsableth
-            th class=px-4 py-3Estadoth
-            th class=px-4 py-3Creación  Asignaciónth
-            th class=px-4 py-3Tiempo Reacciónth
-          tr
-        thead
-        tbody id=tasksTableBody
-          !-- Filas generadas dinámicamente --
-        tbody
-      table
-    div
-  section
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-slate-300">
+        <thead class="text-xs uppercase bg-trimble-grayDark text-slate-400 border-b border-trimble-borderDark">
+          <tr>
+            <th class="px-4 py-3">ID / Tarea</th>
+            <th class="px-4 py-3">Disciplina</th>
+            <th class="px-4 py-3">Responsable</th>
+            <th class="px-4 py-3">Estado</th>
+            <th class="px-4 py-3">Creación / Asignación</th>
+            <th class="px-4 py-3">Tiempo Reacción</th>
+          </tr>
+        </thead>
+        <tbody id="tasksTableBody">
+          <!-- Generado dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-  script
+  <script>
     let rawTasks = [];
     let filteredTasks = [];
     let tcAPI = null;
     let chart1, chart2, chart3;
 
-     Inicializar Trimble Connect Workspace API
-    window.addEventListener('load', async () = {
+    window.addEventListener('load', async () => {
       try {
-        if (window.TrimbleConnectWorkspace) {
-          tcAPI = await window.TrimbleConnectWorkspace.connect(window.parent, (event, args) = {
-            if (event === topic.add  event === topic.update  event === topic.delete) {
-              loadTrimbleTasks();
-            }
-          });
+        if (typeof TrimbleConnect !== 'undefined') {
+          tcAPI = await TrimbleConnect.connect();
           
-          document.getElementById('api-status').className = px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50010 text-emerald-400 border border-emerald-50020 flex items-center gap-2;
-          document.getElementById('api-status').innerHTML = `span class=w-2 h-2 rounded-full bg-emerald-400span Conectado a Trimble`;
+          document.getElementById('api-status').className = 'px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-2';
+          document.getElementById('api-status').innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Conectado a Trimble`;
 
-          const projectInfo = await tcAPI.get(project);
-          if(projectInfo) {
-            document.getElementById('project-info').innerText = `Proyecto ${projectInfo.name  'Trimble Project'}`;
+          try {
+            const projectInfo = await tcAPI.project.getProject();
+            if(projectInfo && projectInfo.name) {
+              document.getElementById('project-info').innerText = `Proyecto: ${projectInfo.name}`;
+            }
+          } catch(err) {
+            document.getElementById('project-info').innerText = "Proyecto Activo de Trimble Connect";
           }
 
           loadTrimbleTasks();
         } else {
-          throw new Error(Trimble API no detectada);
+          throw new Error("Librería de Trimble Connect no encontrada.");
         }
       } catch (e) {
-        console.warn(Modo fuera de iframe o Standalone - Cargando datos de muestra, e);
-        document.getElementById('api-status').className = px-3 py-1 rounded-full text-xs font-semibold bg-slate-50010 text-slate-400 border border-slate-50020 flex items-center gap-2;
-        document.getElementById('api-status').innerHTML = `span class=w-2 h-2 rounded-full bg-slate-400span Modo Demo (Sin Iframe)`;
-        document.getElementById('project-info').innerText = Demostración con datos de prueba;
+        console.warn("Modo Demo - Cargando datos de muestra:", e);
+        document.getElementById('api-status').className = 'px-3 py-1 rounded-full text-xs font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20 flex items-center gap-2';
+        document.getElementById('api-status').innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span> Modo Demo (Sin Iframe)`;
+        document.getElementById('project-info').innerText = "Demostración con datos de prueba";
         loadDemoTasks();
       }
     });
 
     async function loadTrimbleTasks() {
       try {
-         Obtener temastareas de la herramienta Tools (BCF)
-        const topics = await tcAPI.get(topics);
+        const topics = await tcAPI.topics.getTopics();
         
-        if (topics && Array.isArray(topics)) {
-          rawTasks = topics.map((t, idx) = {
-            const created = new Date(t.creationDate  t.creation_date  Date.now());
-            const modified = new Date(t.modifiedDate  t.modified_date  Date.now());
+        if (topics && Array.isArray(topics) && topics.length > 0) {
+          rawTasks = topics.map((t, idx) => {
+            const created = new Date(t.creationDate || t.creation_date || Date.now());
+            const modified = new Date(t.modifiedDate || t.modified_date || Date.now());
             
-             Tiempo de reacción estimado en horas entre creación y modificación
             let reactionHours = 0;
-            if (modified  created) {
-              reactionHours = parseFloat(((modified - created)  (1000  60  60)).toFixed(1));
+            if (modified > created) {
+              reactionHours = parseFloat(((modified - created) / (1000 * 60 * 60)).toFixed(1));
             } else {
-              reactionHours = parseFloat((Math.random()  8 + 1).toFixed(1));
+              reactionHours = parseFloat((Math.random() * 8 + 1).toFixed(1));
             }
 
             return {
-              id t.id  `T-${idx + 1}`,
-              title t.title  Tarea sin título,
-              discipline t.topicType  t.discipline  t.stage  Arquitectura,
-              assignee t.assignedTo  t.assigned_to  Sin Asignar,
-              status mapStatus(t.topicStatus  t.status),
-              createdAt created.toISOString().split('T')[0],
-              reactionTime reactionHours
+              id: t.id || `T-${idx + 1}`,
+              title: t.title || 'Tarea sin título',
+              discipline: t.topicType || t.discipline || t.stage || 'Arquitectura',
+              assignee: t.assignedTo || t.assigned_to || 'Sin Asignar',
+              status: mapStatus(t.topicStatus || t.status),
+              createdAt: created.toISOString().split('T')[0],
+              reactionTime: reactionHours
             };
           });
         } else {
@@ -230,7 +227,7 @@ body class=bg-trimble-grayDark text-slate-100 font-sans min-h-screen p-4 mdp-6
           return;
         }
       } catch (err) {
-        console.error(Error al consultar API de Trimble, err);
+        console.error("Error al consultar la API de Trimble, cambiando a Demo:", err);
         loadDemoTasks();
         return;
       }
@@ -240,189 +237,9 @@ body class=bg-trimble-grayDark text-slate-100 font-sans min-h-screen p-4 mdp-6
     }
 
     function mapStatus(statusStr) {
-      if (!statusStr) return Pendiente;
+      if (!statusStr) return 'Pendiente';
       const s = statusStr.toLowerCase();
-      if (s.includes(close)  s.includes(resuelt)  s.includes(complet)  s.includes(aprob)) return Completada;
-      if (s.includes(progr)  s.includes(curs)  s.includes(open)  s.includes(abiert)) return En Curso;
-      return Pendiente;
+      if (s.includes('close') || s.includes('resuelt') || s.includes('complet') || s.includes('aprob')) return 'Completada';
+      if (s.includes('progr') || s.includes('curs') || s.includes('open') || s.includes('abiert')) return 'En Curso';
+      return 'Pendiente';
     }
-
-    function loadDemoTasks() {
-      rawTasks = [
-        { id TR-101, title Interferencia tubería sanitarias vs viga V-102, discipline MEP, assignee Carlos Ruiz, status En Curso, createdAt 2026-10-20, reactionTime 3.5 },
-        { id TR-102, title Revisión de alturas libres en pasillo N2, discipline Arquitectura, assignee Ana Gómez, status Completada, createdAt 2026-10-18, reactionTime 1.2 },
-        { id TR-103, title Validación de cargas mecánicas en losa técnica, discipline Estructuras, assignee David Vera, status Pendiente, createdAt 2026-10-22, reactionTime 0 },
-        { id TR-104, title Ajuste de pasamuros en muros de contención, discipline Estructuras, assignee David Vera, status En Curso, createdAt 2026-10-21, reactionTime 4.8 },
-        { id TR-105, title Detalle de fachada muro cortina Eje C, discipline Arquitectura, assignee Sofia Lima, status Completada, createdAt 2026-10-15, reactionTime 2.0 },
-        { id TR-106, title Ruteo de bandejas eléctricas nivel subsuelo, discipline Electricidad, assignee Jorge Toro, status Pendiente, createdAt 2026-10-23, reactionTime 0 }
-      ];
-      initDisciplineFilter();
-      applyFilters();
-    }
-
-    function initDisciplineFilter() {
-      const select = document.getElementById('disciplineFilter');
-      const disciplines = [...new Set(rawTasks.map(t = t.discipline))];
-      select.innerHTML = 'option value=ALLTodas las Disciplinasoption';
-      disciplines.forEach(d = {
-        select.innerHTML += `option value=${d}${d}option`;
-      });
-    }
-
-    function applyFilters() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const disc = document.getElementById('disciplineFilter').value;
-      const status = document.getElementById('statusFilter').value;
-
-      filteredTasks = rawTasks.filter(t = {
-        const matchesSearch = t.title.toLowerCase().includes(search)  t.assignee.toLowerCase().includes(search)  t.id.toLowerCase().includes(search);
-        const matchesDisc = disc === 'ALL'  t.discipline === disc;
-        const matchesStatus = status === 'ALL'  t.status === status;
-        return matchesSearch && matchesDisc && matchesStatus;
-      });
-
-      updateKPIs();
-      renderTable();
-      renderCharts();
-    }
-
-    function updateKPIs() {
-      const total = filteredTasks.length;
-      const pending = filteredTasks.filter(t = t.status === 'Pendiente').length;
-      const inProgress = filteredTasks.filter(t = t.status === 'En Curso').length;
-      const completed = filteredTasks.filter(t = t.status === 'Completada').length;
-
-      const reactedTasks = filteredTasks.filter(t = t.reactionTime  0);
-      const avgReaction = reactedTasks.length  0 
-         (reactedTasks.reduce((acc, t) = acc + t.reactionTime, 0)  reactedTasks.length).toFixed(1)
-         0.0;
-
-      document.getElementById('kpi-total').innerText = total;
-      document.getElementById('kpi-pending').innerText = pending;
-      document.getElementById('kpi-in-progress').innerText = inProgress;
-      document.getElementById('kpi-completed').innerText = completed;
-      document.getElementById('kpi-reaction-time').innerText = `${avgReaction}h`;
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('tasksTableBody');
-      tbody.innerHTML = '';
-
-      if (filteredTasks.length === 0) {
-        tbody.innerHTML = `trtd colspan=6 class=text-center py-6 text-slate-500No se encontraron tareas registradas.tdtr`;
-        return;
-      }
-
-      filteredTasks.forEach(t = {
-        let statusBadge = '';
-        if(t.status === 'Pendiente') statusBadge = 'span class=px-2 py-0.5 rounded text-xs bg-amber-50020 text-amber-300 border border-amber-50030Pendientespan';
-        else if(t.status === 'En Curso') statusBadge = 'span class=px-2 py-0.5 rounded text-xs bg-blue-50020 text-blue-300 border border-blue-50030En Cursospan';
-        else statusBadge = 'span class=px-2 py-0.5 rounded text-xs bg-emerald-50020 text-emerald-300 border border-emerald-50030Completadaspan';
-
-        tbody.innerHTML += `
-          tr class=border-b border-trimble-borderDark50 hoverbg-slate-80040
-            td class=px-4 py-3 font-medium text-white
-              span class=text-xs text-trimble-yellow block${t.id}span
-              ${t.title}
-            td
-            td class=px-4 py-3span class=px-2 py-1 rounded bg-slate-800 border border-slate-700 text-xs${t.discipline}spantd
-            td class=px-4 py-3${t.assignee}td
-            td class=px-4 py-3${statusBadge}td
-            td class=px-4 py-3 text-slate-400 text-xs${t.createdAt}td
-            td class=px-4 py-3 font-semibold ${t.reactionTime  4  'text-rose-400'  'text-slate-200'}${t.reactionTime  0  t.reactionTime + ' h'  'Sin iniciar'}td
-          tr
-        `;
-      });
-    }
-
-    function renderCharts() {
-      const disciplines = [...new Set(filteredTasks.map(t = t.discipline))];
-      
-       Data 1 Conteo por Disciplina
-      const countByDiscipline = disciplines.map(d = filteredTasks.filter(t = t.discipline === d).length);
-      
-       Data 2 Estado por Disciplina
-      const pendingByDisc = disciplines.map(d = filteredTasks.filter(t = t.discipline === d && t.status === 'Pendiente').length);
-      const inProgByDisc = disciplines.map(d = filteredTasks.filter(t = t.discipline === d && t.status === 'En Curso').length);
-      const compByDisc = disciplines.map(d = filteredTasks.filter(t = t.discipline === d && t.status === 'Completada').length);
-
-       Data 3 Tiempo Medio Reacción por Disciplina
-      const avgReactionByDisc = disciplines.map(d = {
-        const items = filteredTasks.filter(t = t.discipline === d && t.reactionTime  0);
-        if (items.length === 0) return 0;
-        return (items.reduce((acc, i) = acc + i.reactionTime, 0)  items.length).toFixed(1);
-      });
-
-      if (chart1) chart1.destroy();
-      if (chart2) chart2.destroy();
-      if (chart3) chart3.destroy();
-
-       Chart 1
-      chart1 = new Chart(document.getElementById('disciplineChart'), {
-        type 'doughnut',
-        data {
-          labels disciplines,
-          datasets [{
-            data countByDiscipline,
-            backgroundColor ['#0063A3', '#F0AB00', '#10B981', '#6366F1', '#EC4899', '#8B5CF6']
-          }]
-        },
-        options { responsive true, maintainAspectRatio false, plugins { legend { labels { color '#94A3B8' } } } }
-      });
-
-       Chart 2
-      chart2 = new Chart(document.getElementById('statusChart'), {
-        type 'bar',
-        data {
-          labels disciplines,
-          datasets [
-            { label 'Pendiente', data pendingByDisc, backgroundColor '#F59E0B' },
-            { label 'En Curso', data inProgByDisc, backgroundColor '#3B82F6' },
-            { label 'Completada', data compByDisc, backgroundColor '#10B981' }
-          ]
-        },
-        options {
-          responsive true,
-          maintainAspectRatio false,
-          scales {
-            x { stacked true, ticks { color '#94A3B8' } },
-            y { stacked true, ticks { color '#94A3B8' } }
-          },
-          plugins { legend { labels { color '#94A3B8' } } }
-        }
-      });
-
-       Chart 3
-      chart3 = new Chart(document.getElementById('reactionChart'), {
-        type 'bar',
-        data {
-          labels disciplines,
-          datasets [{
-            label 'Horas Promedio',
-            data avgReactionByDisc,
-            backgroundColor '#F0AB00'
-          }]
-        },
-        options {
-          indexAxis 'y',
-          responsive true,
-          maintainAspectRatio false,
-          scales {
-            x { ticks { color '#94A3B8' } },
-            y { ticks { color '#94A3B8' } }
-          },
-          plugins { legend { labels { color '#94A3B8' } } }
-        }
-      });
-    }
-
-    function refreshData() {
-      if (tcAPI) {
-        loadTrimbleTasks();
-      } else {
-        loadDemoTasks();
-      }
-    }
-  script
-body
-html
