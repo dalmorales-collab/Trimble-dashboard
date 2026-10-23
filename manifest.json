@@ -5,7 +5,7 @@
   "vendor": "Ingeniería & BIM",
   "icon": "https://raw.githubusercontent.com/primefaces/sakai-ng/main/src/assets/layout/images/logo-dark.svg",
   "extensionPoint": "ProjectDetail",
-  "url": "https://TU-Udalmorales-collab.github.io/trimble-dashboard/index.html",
+  "url": ""https://dalmorales-collab.github.io/Tablero-de-instrumentos-Trimble/index.html",
   "permissions": [
     "project:read",
     "user:read",
